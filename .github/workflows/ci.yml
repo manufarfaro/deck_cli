@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
   CARGO_TERM_COLOR: always
@@ -44,7 +44,6 @@ jobs:
 
   build:
     name: Build
-    needs: [lint]
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -109,10 +108,10 @@ jobs:
           name: Release ${{ steps.tag.outputs.tag }}
           body: |
             Automated release for commit ${{ github.sha }}
-            
+
             ## Changes
             - Latest changes from main branch
-            
+
             ## Downloads
             - Linux: deck_cli-linux
             - macOS: deck_cli-macos  
@@ -124,4 +123,4 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
