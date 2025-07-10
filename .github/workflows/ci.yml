@@ -65,9 +65,10 @@ jobs:
 
       - name: Set Windows artifact names
         if: matrix.os == 'windows-latest'
+        shell: pwsh
         run: |
-          echo "ARTIFACT_NAME=deck_cli-windows.exe" >> $GITHUB_ENV
-          echo "BINARY_PATH=target/release/deck_cli.exe" >> $GITHUB_ENV
+          "ARTIFACT_NAME=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BINARY_PATH=target/release/deck_cli.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Set macOS artifact names
         if: matrix.os == 'macos-latest'
