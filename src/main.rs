@@ -5,5 +5,5 @@ struct Deck {
 
 fn main() {
     let deck = Deck { cards: vec![] };
-    println!("Heres your deck: {:?}", deck);
+    println!("Here's your deck: {:?}", deck);
 }
