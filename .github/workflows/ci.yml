@@ -63,18 +63,23 @@ jobs:
       - name: Build release
         run: cargo build --release
 
-      - name: Prepare artifact name
+      - name: Set Windows artifact names
+        if: matrix.os == 'windows-latest'
         run: |
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            echo "ARTIFACT_NAME=deck_cli-windows.exe" >> $GITHUB_ENV
-            echo "BINARY_PATH=target/release/deck_cli.exe" >> $GITHUB_ENV
-          elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-            echo "ARTIFACT_NAME=deck_cli-macos" >> $GITHUB_ENV
-            echo "BINARY_PATH=target/release/deck_cli" >> $GITHUB_ENV
-          else
-            echo "ARTIFACT_NAME=deck_cli-linux" >> $GITHUB_ENV
-            echo "BINARY_PATH=target/release/deck_cli" >> $GITHUB_ENV
-          fi
+          echo "ARTIFACT_NAME=deck_cli-windows.exe" >> $GITHUB_ENV
+          echo "BINARY_PATH=target/release/deck_cli.exe" >> $GITHUB_ENV
+
+      - name: Set macOS artifact names
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo "ARTIFACT_NAME=deck_cli-macos" >> $GITHUB_ENV
+          echo "BINARY_PATH=target/release/deck_cli" >> $GITHUB_ENV
+
+      - name: Set Linux artifact names
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo "ARTIFACT_NAME=deck_cli-linux" >> $GITHUB_ENV
+          echo "BINARY_PATH=target/release/deck_cli" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
