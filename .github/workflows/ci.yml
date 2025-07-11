@@ -68,22 +68,22 @@ jobs:
         shell: pwsh
         run: |
           Copy-Item "target/release/deck_cli.exe" "deck_cli-windows.exe"
-          "ARTIFACT_NAME=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "BINARY_PATH=deck_cli" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "ARTIFACT_NAME=deck_cli" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BINARY_PATH=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Prepare macOS artifact
         if: matrix.os == 'macos-latest'
         run: |
           cp target/release/deck_cli deck_cli-macos
-          echo "ARTIFACT_NAME=deck_cli-macos" >> $GITHUB_ENV
-          echo "BINARY_PATH=deck_cli" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=deck_cli" >> $GITHUB_ENV
+          echo "BINARY_PATH=deck_cli-macos" >> $GITHUB_ENV
 
       - name: Prepare Linux artifact
         if: matrix.os == 'ubuntu-latest'
         run: |
           cp target/release/deck_cli deck_cli-linux
-          echo "ARTIFACT_NAME=deck_cli-linux" >> $GITHUB_ENV
-          echo "BINARY_PATH=deck_cli" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=deck_cli" >> $GITHUB_ENV
+          echo "BINARY_PATH=deck_cli-linux" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
