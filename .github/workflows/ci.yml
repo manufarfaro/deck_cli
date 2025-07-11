@@ -111,6 +111,16 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -la ./artifacts/*/
 
+      - name: Rename binaries for release
+        run: |
+          mv ./artifacts/deck_cli-linux/deck_cli ./artifacts/deck_cli-linux
+          mv ./artifacts/deck_cli-macos/deck_cli ./artifacts/deck_cli-macos
+          mv ./artifacts/deck_cli-windows.exe/deck_cli.exe ./artifacts/deck_cli-windows.exe
+          rm -rf ./artifacts/deck_cli-linux/
+          rm -rf ./artifacts/deck_cli-macos/
+          rm -rf ./artifacts/deck_cli-windows.exe/
+          ls -la ./artifacts/
+
       - name: Generate release tag
         id: tag
         run: |
