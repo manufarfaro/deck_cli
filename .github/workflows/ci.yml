@@ -106,19 +106,19 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ./artifacts
+          path: ./tmp-artifacts
 
       - name: Display structure of downloaded files
-        run: ls -la ./artifacts/*/
+        run: ls -la ./tmp-artifacts/*/
 
       - name: Rename binaries for release
         run: |
-          mv ./artifacts/deck_cli-linux/deck_cli ./artifacts/deck_cli-linux
-          mv ./artifacts/deck_cli-macos/deck_cli ./artifacts/deck_cli-macos
-          mv ./artifacts/deck_cli-windows.exe/deck_cli.exe ./artifacts/deck_cli-windows.exe
-          rm -rf ./artifacts/deck_cli-linux/
-          rm -rf ./artifacts/deck_cli-macos/
-          rm -rf ./artifacts/deck_cli-windows.exe/
+          mv ./tmp-artifacts/deck_cli-linux/deck_cli ./artifacts/deck_cli-linux
+          mv ./tmp-artifacts/deck_cli-macos/deck_cli ./artifacts/deck_cli-macos
+          mv ./tmp-artifacts/deck_cli-windows.exe/deck_cli.exe ./artifacts/deck_cli-windows.exe
+          rm -rf ./tmp-artifacts/deck_cli-linux/
+          rm -rf ./tmp-artifacts/deck_cli-macos/
+          rm -rf ./tmp-artifacts/deck_cli-windows.exe/
           ls -la ./artifacts/
 
       - name: Generate release tag
@@ -142,9 +142,9 @@ jobs:
             - macOS: deck_cli-macos  
             - Windows: deck_cli-windows.exe
           files: |
-            ./artifacts/deck_cli-linux/deck_cli-linux
-            ./artifacts/deck_cli-macos/deck_cli-macos
-            ./artifacts/deck_cli-windows.exe/deck_cli-windows.exe
+            ./artifacts/deck_cli-linux
+            ./artifacts/deck_cli-macos
+            ./artifacts/deck_cli-windows.exe
           draft: false
           prerelease: false
         env:
