@@ -67,23 +67,23 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          Copy-Item "target/release/deck_cli.exe" "deck_cli-windows.exe"
+          Copy-Item "target/release/deck_cli.exe" "deck_cli.exe"
           "ARTIFACT_NAME=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "BINARY_PATH=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BINARY_PATH=deck_cli.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Prepare macOS artifact
         if: matrix.os == 'macos-latest'
         run: |
-          cp target/release/deck_cli deck_cli-macos
+          cp target/release/deck_cli deck_cli
           echo "ARTIFACT_NAME=deck_cli-macos" >> $GITHUB_ENV
-          echo "BINARY_PATH=deck_cli-macos" >> $GITHUB_ENV
+          echo "BINARY_PATH=deck_cli" >> $GITHUB_ENV
 
       - name: Prepare Linux artifact
         if: matrix.os == 'ubuntu-latest'
         run: |
-          cp target/release/deck_cli deck_cli-linux
+          cp target/release/deck_cli deck_cli
           echo "ARTIFACT_NAME=deck_cli-linux" >> $GITHUB_ENV
-          echo "BINARY_PATH=deck_cli-linux" >> $GITHUB_ENV
+          echo "BINARY_PATH=deck_cli" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -106,20 +106,22 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ./tmp-artifacts
+          path: ./artifacts
 
       - name: Display structure of downloaded files
-        run: ls -la ./tmp-artifacts/*/
+        run: ls -la ./artifacts/*/
 
       - name: Rename binaries for release
         run: |
-          mkdir -p ./artifacts/
-          mv ./tmp-artifacts/deck_cli-linux/deck_cli ./artifacts/deck_cli-linux
-          mv ./tmp-artifacts/deck_cli-macos/deck_cli ./artifacts/deck_cli-macos
-          mv ./tmp-artifacts/deck_cli-windows.exe/deck_cli.exe ./artifacts/deck_cli-windows.exe
-          rm -rf ./tmp-artifacts/deck_cli-linux/
-          rm -rf ./tmp-artifacts/deck_cli-macos/
-          rm -rf ./tmp-artifacts/deck_cli-windows.exe/
+          mkdir -p ./tmp-artifacts/
+          mv ./artifacts/deck_cli-linux/deck_cli ./tmp-artifacts/deck_cli-linux
+          mv ./artifacts/deck_cli-macos/deck_cli ./tmp-artifacts/deck_cli-macos
+          mv ./artifacts/deck_cli-windows.exe/deck_cli.exe ./tmp-artifacts/deck_cli-windows.exe
+          rm -rf ./artifacts/deck_cli-linux/
+          rm -rf ./artifacts/deck_cli-macos/
+          rm -rf ./artifacts/deck_cli-windows.exe/
+          mv ./tmp-artifacts/deck_cli-* ./artifacts/
+          rm -rf ./tmp-artifacts/
           ls -la ./artifacts/
 
       - name: Generate release tag
