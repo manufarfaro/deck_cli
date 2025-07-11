@@ -63,24 +63,27 @@ jobs:
       - name: Build release
         run: cargo build --release
 
-      - name: Set Windows artifact names
+      - name: Prepare Windows artifact
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
+          Copy-Item "target/release/deck_cli.exe" "deck_cli-windows.exe"
           "ARTIFACT_NAME=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "BINARY_PATH=target/release/deck_cli.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BINARY_PATH=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Set macOS artifact names
+      - name: Prepare macOS artifact
         if: matrix.os == 'macos-latest'
         run: |
+          cp target/release/deck_cli deck_cli-macos
           echo "ARTIFACT_NAME=deck_cli-macos" >> $GITHUB_ENV
-          echo "BINARY_PATH=target/release/deck_cli" >> $GITHUB_ENV
+          echo "BINARY_PATH=deck_cli-macos" >> $GITHUB_ENV
 
-      - name: Set Linux artifact names
+      - name: Prepare Linux artifact
         if: matrix.os == 'ubuntu-latest'
         run: |
+          cp target/release/deck_cli deck_cli-linux
           echo "ARTIFACT_NAME=deck_cli-linux" >> $GITHUB_ENV
-          echo "BINARY_PATH=target/release/deck_cli" >> $GITHUB_ENV
+          echo "BINARY_PATH=deck_cli-linux" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -106,7 +109,7 @@ jobs:
           path: ./artifacts
 
       - name: Display structure of downloaded files
-        run: ls -la ./artifacts/
+        run: ls -la ./artifacts/*/
 
       - name: Rename binaries for release
         run: |
@@ -139,9 +142,9 @@ jobs:
             - macOS: deck_cli-macos  
             - Windows: deck_cli-windows.exe
           files: |
-            ./artifacts/deck_cli-linux
-            ./artifacts/deck_cli-macos
-            ./artifacts/deck_cli-windows.exe
+            ./artifacts/deck_cli-linux/deck_cli-linux
+            ./artifacts/deck_cli-macos/deck_cli-macos
+            ./artifacts/deck_cli-windows.exe/deck_cli-windows.exe
           draft: false
           prerelease: false
         env:
