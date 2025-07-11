@@ -113,6 +113,7 @@ jobs:
 
       - name: Rename binaries for release
         run: |
+          mkdir -p ./artifacts/
           mv ./tmp-artifacts/deck_cli-linux/deck_cli ./artifacts/deck_cli-linux
           mv ./tmp-artifacts/deck_cli-macos/deck_cli ./artifacts/deck_cli-macos
           mv ./tmp-artifacts/deck_cli-windows.exe/deck_cli.exe ./artifacts/deck_cli-windows.exe
