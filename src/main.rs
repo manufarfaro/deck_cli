@@ -14,7 +14,7 @@ impl Deck {
 
         for suit in suits {
             for value in values {
-                let card = format!("{} of {}", value, suit);
+                let card = format!("{value} of {suit}");
                 cards.push(card);
             }
         }
