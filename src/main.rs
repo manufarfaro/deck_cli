@@ -31,5 +31,5 @@ fn main() {
     let mut deck = Deck::new();
     deck.shuffle();
 
-    println!("Heres your deck: {:#?}", deck);
+    println!("Heres your deck: {deck:#?}");
 }
