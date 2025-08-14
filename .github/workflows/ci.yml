@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  APP_NAME: deck_cli
 
 jobs:
   lint:
@@ -67,23 +68,23 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          Copy-Item "target/release/deck_cli.exe" "deck_cli.exe"
-          "ARTIFACT_NAME=deck_cli-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "BINARY_PATH=deck_cli.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Copy-Item "target/release/$env:APP_NAME.exe" "$env:APP_NAME.exe"
+          "ARTIFACT_NAME=$($env:APP_NAME)-windows.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "BINARY_PATH=$($env:APP_NAME).exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Prepare macOS artifact
         if: matrix.os == 'macos-latest'
         run: |
-          cp target/release/deck_cli deck_cli
-          echo "ARTIFACT_NAME=deck_cli-macos" >> $GITHUB_ENV
-          echo "BINARY_PATH=deck_cli" >> $GITHUB_ENV
+          cp target/release/$APP_NAME $APP_NAME
+          echo "ARTIFACT_NAME=$APP_NAME-macos" >> $GITHUB_ENV
+          echo "BINARY_PATH=$APP_NAME" >> $GITHUB_ENV
 
       - name: Prepare Linux artifact
         if: matrix.os == 'ubuntu-latest'
         run: |
-          cp target/release/deck_cli deck_cli
-          echo "ARTIFACT_NAME=deck_cli-linux" >> $GITHUB_ENV
-          echo "BINARY_PATH=deck_cli" >> $GITHUB_ENV
+          cp target/release/$APP_NAME $APP_NAME
+          echo "ARTIFACT_NAME=$APP_NAME-linux" >> $GITHUB_ENV
+          echo "BINARY_PATH=$APP_NAME" >> $GITHUB_ENV
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -114,13 +115,13 @@ jobs:
       - name: Rename binaries for release
         run: |
           mkdir -p ./tmp-artifacts/
-          mv ./artifacts/deck_cli-linux/deck_cli ./tmp-artifacts/deck_cli-linux
-          mv ./artifacts/deck_cli-macos/deck_cli ./tmp-artifacts/deck_cli-macos
-          mv ./artifacts/deck_cli-windows.exe/deck_cli.exe ./tmp-artifacts/deck_cli-windows.exe
-          rm -rf ./artifacts/deck_cli-linux/
-          rm -rf ./artifacts/deck_cli-macos/
-          rm -rf ./artifacts/deck_cli-windows.exe/
-          mv ./tmp-artifacts/deck_cli-* ./artifacts/
+          mv ./artifacts/$APP_NAME-linux/$APP_NAME ./tmp-artifacts/$APP_NAME-linux
+          mv ./artifacts/$APP_NAME-macos/$APP_NAME ./tmp-artifacts/$APP_NAME-macos
+          mv ./artifacts/$APP_NAME-windows.exe/$APP_NAME.exe ./tmp-artifacts/$APP_NAME-windows.exe
+          rm -rf ./artifacts/$APP_NAME-linux/
+          rm -rf ./artifacts/$APP_NAME-macos/
+          rm -rf ./artifacts/$APP_NAME-windows.exe/
+          mv ./tmp-artifacts/$APP_NAME-* ./artifacts/
           rm -rf ./tmp-artifacts/
           ls -la ./artifacts/
 
@@ -141,13 +142,13 @@ jobs:
             - Latest changes from main branch
 
             ## Downloads
-            - Linux: deck_cli-linux
-            - macOS: deck_cli-macos  
-            - Windows: deck_cli-windows.exe
+            - Linux: ${{ env.APP_NAME }}-linux
+            - macOS: ${{ env.APP_NAME }}-macos  
+            - Windows: ${{ env.APP_NAME }}-windows.exe
           files: |
-            ./artifacts/deck_cli-linux
-            ./artifacts/deck_cli-macos
-            ./artifacts/deck_cli-windows.exe
+            ./artifacts/${{ env.APP_NAME }}-linux
+            ./artifacts/${{ env.APP_NAME }}-macos
+            ./artifacts/${{ env.APP_NAME }}-windows.exe
           draft: false
           prerelease: false
         env:
